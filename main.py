@@ -681,7 +681,16 @@ def main():
     app.add_handler(CallbackQueryHandler(stop_batch, pattern="stop"))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_single_card))
     app.add_handler(MessageHandler(filters.Document.ALL, handle_document))
-
+    # في نهاية دالة main() قبل app.run_polling()
+import threading
+def keep_alive():
+    while True:
+        time.sleep(300)
+        try:
+            requests.get("https://stripe-bot-xxxx.onrender.com")
+        except:
+            pass
+threading.Thread(target=keep_alive, daemon=True).start()
     print("✅ البوت يعمل...")
     app.run_polling()
 
